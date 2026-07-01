@@ -2,7 +2,7 @@ package app;
 
 import controller.KnowledgeController;
 import model.KnowledgeRepository;
-import view.ConsoleView;
+import view.SwingView;
 
 public class Main {
 
@@ -12,10 +12,9 @@ public class Main {
 
         KnowledgeController controller = new KnowledgeController(repository);
 
-        ConsoleView view = new ConsoleView(controller);
+        SwingView view = new SwingView(controller);
 
-        view.start();
-
+        view.setVisible(true);
     }
 
 }

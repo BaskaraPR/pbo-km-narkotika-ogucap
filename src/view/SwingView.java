@@ -10,14 +10,13 @@ import java.util.ArrayList;
 
 public class SwingView extends JFrame {
 
-    private KnowledgeController controller;
+    private final KnowledgeController controller;
     private JTable table;
     private DefaultTableModel tableModel;
     private JLabel statusLabel;
 
-    public SwingView() {
-        // Inisialisasi Controller
-        this.controller = new KnowledgeController();
+    public SwingView(KnowledgeController controller) {
+        this.controller = controller;
 
         // Setup Frame Utama
         setTitle("Sistem Manajemen Pengetahuan Putusan Narkoba");
