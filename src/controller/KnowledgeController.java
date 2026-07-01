@@ -1,3 +1,9 @@
+package controller;
+
+import model.KnowledgeRepository;
+import model.Putusan;
+import model.StatistikPutusan;
+
 import java.util.ArrayList;
 
 public class KnowledgeController {
