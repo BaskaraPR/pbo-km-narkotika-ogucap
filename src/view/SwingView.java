@@ -3,6 +3,8 @@ package view;
 import controller.KnowledgeController;
 import model.Putusan;
 import model.StatistikPutusan;
+import util.InputHandler; // 1. Import InputHandler
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -11,12 +13,15 @@ import java.util.ArrayList;
 public class SwingView extends JFrame {
 
     private final KnowledgeController controller;
+    private final InputHandler inputHandler; // 2. Deklarasi InputHandler
     private JTable table;
     private DefaultTableModel tableModel;
     private JLabel statusLabel;
 
+    // Constructor TETAP SAMA persis seperti yang dipanggil oleh Main.java
     public SwingView(KnowledgeController controller) {
         this.controller = controller;
+        this.inputHandler = new InputHandler(); // 3. Inisialisasi InputHandler di dalam View
 
         // Setup Frame Utama
         setTitle("Sistem Manajemen Pengetahuan Putusan Narkoba");
@@ -40,7 +45,7 @@ public class SwingView extends JFrame {
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Mencegah user mengedit tabel langsung
+                return false;
             }
         };
 
@@ -61,7 +66,6 @@ public class SwingView extends JFrame {
         JButton btnStatistik = new JButton("Lihat Statistik");
         JButton btnRefresh = new JButton("Refresh Semua");
 
-        // Styling tombol agar lebih enak dilihat
         Font btnFont = new Font("Arial", Font.PLAIN, 14);
         for (JButton btn : new JButton[]{btnTambah, btnHapus, btnCariNama, btnFilterJenis, btnStatistik, btnRefresh}) {
             btn.setFont(btnFont);
@@ -73,13 +77,12 @@ public class SwingView extends JFrame {
         statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
 
-        // Menggabungkan Button Panel dan Status Bar
         JPanel southContainer = new JPanel(new BorderLayout());
         southContainer.add(buttonPanel, BorderLayout.CENTER);
         southContainer.add(statusLabel, BorderLayout.SOUTH);
         add(southContainer, BorderLayout.SOUTH);
 
-        // 5. Action Listeners (Menghubungkan tombol ke method)
+        // 5. Action Listeners
         btnTambah.addActionListener(e -> actionTambah());
         btnHapus.addActionListener(e -> actionHapus());
         btnCariNama.addActionListener(e -> actionCariNama());
@@ -116,21 +119,21 @@ public class SwingView extends JFrame {
         }
     }
 
+    // PENGGUNAAN INPUTHANDLER DIMULAI DI SINI
     private void actionCariNama() {
-        String nama = JOptionPane.showInputDialog(this, "Masukkan Nama Terdakwa:");
-        if (nama != null && !nama.trim().isEmpty()) {
-            // Mengambil data dari repository untuk ditampilkan di tabel
-            ArrayList<Putusan> hasil = controller.getRepository().cariByNama(nama.trim());
-            updateTable(hasil, "Status: Menampilkan hasil pencarian nama '" + nama + "' (" + hasil.size() + " data)");
-        }
+        // Validasi dipindahkan ke InputHandler (getMandatoryString akan loop jika kosong)
+        String nama = inputHandler.getMandatoryString("Masukkan Nama Terdakwa: ");
+
+        ArrayList<Putusan> hasil = controller.getRepository().cariByNama(nama);
+        updateTable(hasil, "Status: Menampilkan hasil pencarian nama '" + nama + "' (" + hasil.size() + " data)");
     }
 
     private void actionFilterJenis() {
-        String jenis = JOptionPane.showInputDialog(this, "Masukkan Jenis Narkotika:");
-        if (jenis != null && !jenis.trim().isEmpty()) {
-            ArrayList<Putusan> hasil = controller.getRepository().filterByJenis(jenis.trim());
-            updateTable(hasil, "Status: Menampilkan filter jenis '" + jenis + "' (" + hasil.size() + " data)");
-        }
+        // Validasi dipindahkan ke InputHandler
+        String jenis = inputHandler.getMandatoryString("Masukkan Jenis Narkotika: ");
+
+        ArrayList<Putusan> hasil = controller.getRepository().filterByJenis(jenis);
+        updateTable(hasil, "Status: Menampilkan filter jenis '" + jenis + "' (" + hasil.size() + " data)");
     }
 
     private void actionStatistik() {
@@ -161,7 +164,7 @@ public class SwingView extends JFrame {
     }
 
     private void updateTable(ArrayList<Putusan> data, String statusText) {
-        tableModel.setRowCount(0); // Kosongkan tabel dulu
+        tableModel.setRowCount(0);
         for (Putusan p : data) {
             tableModel.addRow(new Object[]{
                     p.getNomorPerkara(),
@@ -175,68 +178,29 @@ public class SwingView extends JFrame {
         statusLabel.setText(statusText);
     }
 
-    // Form Dialog untuk Tambah Putusan (12 Input)
+    // FORM INPUT SEKARANG MENGGUNAKAN INPUTHANDLER (MUNCUL DI CONSOLE)
     private Putusan showAddForm() {
-        JPanel panel = new JPanel(new GridLayout(12, 2, 5, 5));
-        panel.setPreferredSize(new Dimension(400, 350));
+        System.out.println("\n--- FORM INPUT PUTUSAN BARU (Via Console) ---");
 
-        JTextField tfNomor = new JTextField();
-        JTextField tfPengadilan = new JTextField();
-        JTextField tfTanggal = new JTextField();
-        JTextField tfNama = new JTextField();
-        JTextField tfUmur = new JTextField();
-        JTextField tfJenis = new JTextField();
-        JTextField tfBerat = new JTextField();
-        JTextField tfPasal = new JTextField();
-        JTextField tfPeran = new JTextField();
-        JTextField tfVonis = new JTextField();
-        JTextField tfDenda = new JTextField();
-        JTextField tfHakim = new JTextField();
+        // Semua validasi (wajib isi, format angka) sekarang dihandle oleh loop di dalam InputHandler!
+        // Kita tidak perlu lagi try-catch atau cek isEmpty() di sini.
+        String nomor    = inputHandler.getMandatoryString("Nomor Perkara (*): ");
+        String pengadilan = inputHandler.getString("Pengadilan: ");
+        String tanggal  = inputHandler.getString("Tanggal Putusan: ");
+        String nama     = inputHandler.getMandatoryString("Nama Terdakwa (*): ");
 
-        panel.add(new JLabel("Nomor Perkara:")); panel.add(tfNomor);
-        panel.add(new JLabel("Pengadilan:")); panel.add(tfPengadilan);
-        panel.add(new JLabel("Tanggal Putusan:")); panel.add(tfTanggal);
-        panel.add(new JLabel("Nama Terdakwa:")); panel.add(tfNama);
-        panel.add(new JLabel("Umur Terdakwa:")); panel.add(tfUmur);
-        panel.add(new JLabel("Jenis Narkotika:")); panel.add(tfJenis);
-        panel.add(new JLabel("Berat Barang Bukti:")); panel.add(tfBerat);
-        panel.add(new JLabel("Pasal Dilanggar:")); panel.add(tfPasal);
-        panel.add(new JLabel("Peran Terdakwa:")); panel.add(tfPeran);
-        panel.add(new JLabel("Vonis Hukuman (bln):")); panel.add(tfVonis);
-        panel.add(new JLabel("Vonis Denda (Rp):")); panel.add(tfDenda);
-        panel.add(new JLabel("Nama Hakim:")); panel.add(tfHakim);
+        int umur        = inputHandler.getInt("Umur Terdakwa: ");
+        String jenis    = inputHandler.getString("Jenis Narkotika: ");
+        double berat    = inputHandler.getDouble("Berat Barang Bukti: ");
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Form Tambah Putusan Baru",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        String pasal    = inputHandler.getString("Pasal Dilanggar: ");
+        String peran    = inputHandler.getString("Peran Terdakwa: ");
 
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                // Validasi input wajib (Exception Handling)
-                if (tfNomor.getText().trim().isEmpty() || tfNama.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Nomor Perkara dan Nama Terdakwa wajib diisi!", "Error Validasi", JOptionPane.ERROR_MESSAGE);
-                    return null;
-                }
+        int vonis       = inputHandler.getInt("Vonis Hukuman (bln): ");
+        double denda    = inputHandler.getDouble("Vonis Denda (Rp): ");
+        String hakim    = inputHandler.getString("Nama Hakim: ");
 
-                // Membuat objek Putusan
-                return new Putusan(
-                        tfNomor.getText().trim(),
-                        tfPengadilan.getText().trim(),
-                        tfTanggal.getText().trim(),
-                        tfNama.getText().trim(),
-                        Integer.parseInt(tfUmur.getText().trim()),
-                        tfJenis.getText().trim(),
-                        Double.parseDouble(tfBerat.getText().trim()),
-                        tfPasal.getText().trim(),
-                        tfPeran.getText().trim(),
-                        Integer.parseInt(tfVonis.getText().trim()),
-                        Double.parseDouble(tfDenda.getText().trim()),
-                        tfHakim.getText().trim()
-                );
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Format angka tidak valid untuk Umur, Berat, Vonis, atau Denda!\nGunakan titik (.) untuk desimal.", "Error Input", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-        }
-        return null;
+        // Kembalikan objek Putusan yang sudah pasti valid karena divalidasi oleh InputHandler
+        return new Putusan(nomor, pengadilan, tanggal, nama, umur, jenis, berat, pasal, peran, vonis, denda, hakim);
     }
 }
