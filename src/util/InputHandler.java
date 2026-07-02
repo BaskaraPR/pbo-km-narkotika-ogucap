@@ -12,16 +12,3 @@ public class InputHandler {
         System.out.print(pesan);
         return scanner.nextLine().trim();
     }
-
-    public String getMandatoryString(String pesan) {
-        String input = "";
-        while (true) {
-            System.out.print(pesan);
-            input = scanner.nextLine().trim();
-            if (!input.isEmpty()) {
-                break;
-            }
-            System.out.println("Error: Input ini wajib diisi dan tidak boleh kosong!");
-        }
-        return input;
-    }
