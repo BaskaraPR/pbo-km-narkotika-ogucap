@@ -1,19 +1,59 @@
+package model;
+
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class KnowledgeRepository {
 
-    private ArrayList<Putusan> daftarPutusan;
+    private final ArrayList<Putusan> daftarPutusan;
 
     
     public KnowledgeRepository() {
         daftarPutusan = new ArrayList<>();
+        loadInitialData();
     }
 
     public void simpan(Putusan p) {
         daftarPutusan.add(p);
     }
 
-    
+    private void loadInitialData() {
+
+        try (BufferedReader br = new BufferedReader(new FileReader("src/dataSample/putusan.csv"))) {
+
+            String line;
+
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+
+                String[] data = line.split(",");
+
+                Putusan p = new Putusan(
+                        data[0],
+                        data[1],
+                        data[2],
+                        data[3],
+                        Integer.parseInt(data[4]),
+                        data[5],
+                        Double.parseDouble(data[6]),
+                        data[7],
+                        data[8],
+                        Integer.parseInt(data[9]),
+                        Double.parseDouble(data[10]),
+                        data[11]
+                );
+
+                daftarPutusan.add(p);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Putusan cariByNomor(String nomor) {
         for (Putusan p : daftarPutusan) {
             if (p.getNomorPerkara().equalsIgnoreCase(nomor)) {
