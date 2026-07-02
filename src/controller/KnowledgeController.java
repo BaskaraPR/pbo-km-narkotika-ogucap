@@ -10,12 +10,10 @@ public class KnowledgeController {
 
     private KnowledgeRepository repository;
 
-    // Konstruktor default yang akan membuat instance repository baru
     public KnowledgeController() {
         this.repository = new KnowledgeRepository();
     }
 
-    // Konstruktor dengan dependency injection untuk fleksibilitas testing/penggunaan ulang
     public KnowledgeController(KnowledgeRepository repository) {
         this.repository = repository;
     }
@@ -83,7 +81,6 @@ public class KnowledgeController {
         ArrayList<Putusan> semuaData = repository.getDaftarSemua();
         StatistikPutusan statistik = new StatistikPutusan(semuaData);
 
-        // Memanggil method yang ada pada class StatistikPutusan
         statistik.tampilkanLaporan();
     }
 
