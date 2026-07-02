@@ -13,4 +13,4 @@ public class InputHandler {
     public String getString(String pesan) {
         System.out.print(pesan);
         return scanner.nextLine().trim();
-    }}
+    }
