@@ -10,6 +10,7 @@ public class KnowledgeController {
 
     private KnowledgeRepository repository;
 
+
     public KnowledgeController() {
         this.repository = new KnowledgeRepository();
     }
