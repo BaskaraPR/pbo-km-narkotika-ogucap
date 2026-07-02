@@ -25,36 +25,3 @@ public class InputHandler {
         }
         return input;
     }
-
-    public int getInt(String pesan) {
-        while (true) {
-            System.out.print(pesan);
-            String input = scanner.nextLine().trim();
-            try {
-                // Menggunakan parse untuk mencegah masalah buffer pada Scanner.nextInt()
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Input tidak valid! Harap masukkan angka bulat (integer).");
-            }
-        }
-    }
-
-    public double getDouble(String pesan) {
-        while (true) {
-            System.out.print(pesan);
-            String input = scanner.nextLine().trim();
-            try {
-                return Double.parseDouble(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Input tidak valid! Harap masukkan angka desimal (double).");
-                System.out.println("Catatan: Gunakan tanda titik (.) untuk pecahan desimal.");
-            }
-        }
-    }
-
-    public void closeScanner() {
-        if (scanner != null) {
-            scanner.close();
-        }
-    }
-}
