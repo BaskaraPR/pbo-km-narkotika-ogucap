@@ -3,7 +3,7 @@ package view;
 import controller.KnowledgeController;
 import model.Putusan;
 import model.StatistikPutusan;
-import util.InputHandler; // 1. Import InputHandler
+import util.InputHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,34 +13,32 @@ import java.util.ArrayList;
 public class SwingView extends JFrame {
 
     private final KnowledgeController controller;
-    private final InputHandler inputHandler; // 2. Deklarasi InputHandler
+    private final InputHandler inputHandler;
     private JTable table;
     private DefaultTableModel tableModel;
     private JLabel statusLabel;
 
-    // Constructor TETAP SAMA persis seperti yang dipanggil oleh Main.java
     public SwingView(KnowledgeController controller) {
         this.controller = controller;
-        this.inputHandler = new InputHandler(); // 3. Inisialisasi InputHandler di dalam View
+        this.inputHandler = new InputHandler();
 
-        // Setup Frame Utama
         setTitle("Sistem Manajemen Pengetahuan Putusan Narkoba");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center screen
+        setLocationRelativeTo(null);
 
         initComponents();
-        refreshTable(); // Load data awal saat aplikasi dibuka
+        refreshTable();
     }
 
     private void initComponents() {
-        // 1. Header
+
         JLabel header = new JLabel("KMS PERKARA NARKOTIKA", SwingConstants.CENTER);
         header.setFont(new Font("Arial", Font.BOLD, 24));
         header.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         add(header, BorderLayout.NORTH);
 
-        // 2. Tabel untuk menampilkan data
+
         String[] columns = {"No. Perkara", "Terdakwa", "Jenis Narkoba", "Pengadilan", "Vonis (Bln)", "Denda (Rp)"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -56,7 +54,6 @@ public class SwingView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // 3. Panel Tombol (Bawah)
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton btnTambah = new JButton("Tambah Putusan");
@@ -72,7 +69,7 @@ public class SwingView extends JFrame {
             buttonPanel.add(btn);
         }
 
-        // 4. Status Bar
+
         statusLabel = new JLabel("Status: Siap");
         statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
@@ -82,7 +79,7 @@ public class SwingView extends JFrame {
         southContainer.add(statusLabel, BorderLayout.SOUTH);
         add(southContainer, BorderLayout.SOUTH);
 
-        // 5. Action Listeners
+
         btnTambah.addActionListener(e -> actionTambah());
         btnHapus.addActionListener(e -> actionHapus());
         btnCariNama.addActionListener(e -> actionCariNama());
@@ -91,7 +88,7 @@ public class SwingView extends JFrame {
         btnRefresh.addActionListener(e -> refreshTable());
     }
 
-    // --- ACTION METHODS ---
+
 
     private void actionTambah() {
         Putusan p = showAddForm();
@@ -119,9 +116,8 @@ public class SwingView extends JFrame {
         }
     }
 
-    // PENGGUNAAN INPUTHANDLER DIMULAI DI SINI
+
     private void actionCariNama() {
-        // Validasi dipindahkan ke InputHandler (getMandatoryString akan loop jika kosong)
         String nama = inputHandler.getMandatoryString("Masukkan Nama Terdakwa: ");
 
         ArrayList<Putusan> hasil = controller.getRepository().cariByNama(nama);
@@ -129,7 +125,6 @@ public class SwingView extends JFrame {
     }
 
     private void actionFilterJenis() {
-        // Validasi dipindahkan ke InputHandler
         String jenis = inputHandler.getMandatoryString("Masukkan Jenis Narkotika: ");
 
         ArrayList<Putusan> hasil = controller.getRepository().filterByJenis(jenis);
@@ -156,7 +151,6 @@ public class SwingView extends JFrame {
         JOptionPane.showMessageDialog(this, msg, "Laporan Statistik Putusan", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // --- HELPER METHODS ---
 
     private void refreshTable() {
         ArrayList<Putusan> data = controller.getRepository().getDaftarSemua();
@@ -178,12 +172,9 @@ public class SwingView extends JFrame {
         statusLabel.setText(statusText);
     }
 
-    // FORM INPUT SEKARANG MENGGUNAKAN INPUTHANDLER (MUNCUL DI CONSOLE)
     private Putusan showAddForm() {
         System.out.println("\n--- FORM INPUT PUTUSAN BARU (Via Console) ---");
 
-        // Semua validasi (wajib isi, format angka) sekarang dihandle oleh loop di dalam InputHandler!
-        // Kita tidak perlu lagi try-catch atau cek isEmpty() di sini.
         String nomor    = inputHandler.getMandatoryString("Nomor Perkara (*): ");
         String pengadilan = inputHandler.getString("Pengadilan: ");
         String tanggal  = inputHandler.getString("Tanggal Putusan: ");
@@ -200,7 +191,6 @@ public class SwingView extends JFrame {
         double denda    = inputHandler.getDouble("Vonis Denda (Rp): ");
         String hakim    = inputHandler.getString("Nama Hakim: ");
 
-        // Kembalikan objek Putusan yang sudah pasti valid karena divalidasi oleh InputHandler
         return new Putusan(nomor, pengadilan, tanggal, nama, umur, jenis, berat, pasal, peran, vonis, denda, hakim);
     }
 }
