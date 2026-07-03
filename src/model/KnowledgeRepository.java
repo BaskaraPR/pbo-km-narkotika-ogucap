@@ -9,14 +9,9 @@ import java.io.IOException;
 public class KnowledgeRepository {
 
     public ArrayList<Putusan> getDaftarUrutVonis() {
-        // Membuat copy list agar data original tidak berubah posisinya
         ArrayList<Putusan> sortedList = new ArrayList<>(daftarPutusan);
 
-        // Mengurutkan dari vonis terkecil ke terbesar (Ascending)
         sortedList.sort(java.util.Comparator.comparingInt(Putusan::getVonisHukuman));
-
-        // Catatan: Jika ingin dari yang terberat (Descending), gunakan:
-        // sortedList.sort((p1, p2) -> Integer.compare(p2.getVonisHukuman(), p1.getVonisHukuman()));
 
         return sortedList;
     }
