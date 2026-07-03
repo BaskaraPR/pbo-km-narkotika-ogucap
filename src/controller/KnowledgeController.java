@@ -54,6 +54,12 @@ public class KnowledgeController {
         return hasil;
     }
 
+    public ArrayList<Putusan> urutkanByVonis() {
+        ArrayList<Putusan> hasil = repository.getDaftarUrutVonis();
+        tampilkanHasilList(hasil, "MENGURUTKAN BERDASARKAN VONIS HUKUMAN");
+        return hasil;
+    }
+
     public ArrayList<Putusan> filterByPengadilan(String pengadilan) {
         ArrayList<Putusan> hasil = repository.filterByPengadilan(pengadilan);
         tampilkanHasilList(hasil, "FILTER PENGADILAN: " + pengadilan);
