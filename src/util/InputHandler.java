@@ -13,7 +13,7 @@ public class InputHandler {
         String input;
         while (true) {
             input = JOptionPane.showInputDialog(null, pesan);
-            if (input == null) return "";
+            if (input == null) return null;
             if (!input.trim().isEmpty()) break;
             JOptionPane.showMessageDialog(null, "Input ini wajib diisi!", "Error", JOptionPane.ERROR_MESSAGE);
         }
