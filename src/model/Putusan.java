@@ -173,10 +173,6 @@ public class Putusan {
         System.out.println(this);
     }
 
-    public String getKategoriHukuman() {
-        return "Placehold";
-    }
-
     @Override
     public String toString() {
         return "Putusan{" +
