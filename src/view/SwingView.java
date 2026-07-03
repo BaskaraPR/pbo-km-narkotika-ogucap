@@ -60,9 +60,10 @@ public class SwingView extends JFrame {
         JButton btnDetail = new JButton("Detail");
         JButton btnStatistik = new JButton("Lihat Statistik");
         JButton btnRefresh = new JButton("Refresh Semua");
+        JButton btnByVonis = new JButton("Urutkan Vonis");
 
         Font btnFont = new Font("Arial", Font.PLAIN, 14);
-        for (JButton btn : new JButton[]{btnTambah, btnHapus, btnCariNama, btnFilterJenis, btnFilterPengadilan, btnDetail, btnStatistik, btnRefresh}) {
+        for (JButton btn : new JButton[]{btnTambah, btnHapus, btnCariNama, btnFilterJenis, btnFilterPengadilan, btnDetail, btnStatistik, btnRefresh, btnByVonis}) {
             btn.setFont(btnFont);
             buttonPanel.add(btn);
         }
@@ -84,6 +85,7 @@ public class SwingView extends JFrame {
         btnDetail.addActionListener(e -> actionDetailByNomor());
         btnStatistik.addActionListener(e -> actionStatistik());
         btnRefresh.addActionListener(e -> refreshTable());
+        btnByVonis.addActionListener(e -> actionUrutVonis());
     }
 
 
@@ -95,6 +97,11 @@ public class SwingView extends JFrame {
             statusLabel.setText("Status: Putusan berhasil ditambahkan.");
         }
     }
+    private void actionUrutVonis() {
+        ArrayList<Putusan> hasil = controller.urutkanByVonis();
+        updateTable(hasil, "Status: Menampilkan data diurutkan berdasarkan Vonis Hukuman.");
+    }
+
 
     private void actionHapus() {
         int selectedRow = table.getSelectedRow();
@@ -303,6 +310,7 @@ public class SwingView extends JFrame {
         panel.add(new JLabel("Vonis Denda (Rp):"));     panel.add(dendaField);
         panel.add(new JLabel("Nama Hakim:"));           panel.add(hakimField);
 
+
         while (true) {
             int result = JOptionPane.showConfirmDialog(this, panel,
                     "Form Input Putusan Baru", JOptionPane.OK_CANCEL_OPTION);
@@ -330,6 +338,7 @@ public class SwingView extends JFrame {
             } catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage(), "Validasi Gagal", JOptionPane.ERROR_MESSAGE);
             }
+
         }
     }
     }
