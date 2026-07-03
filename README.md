@@ -15,6 +15,7 @@ Proyek ini membutuhkan lingkungan pengembangan Java standar. Berikut adalah lang
 - Pastikan Anda tidak memasukkan input yang salah agar dapat melihat respons penanganan error dari sistem.  
 
 ## Demo Video
+https://youtu.be/M7bIf5W1plc?si=7Qn4w_ZpgmLJeqdQ
 
 ## Anggota Kelompok
 - Baskara Putra Ramadhan (202510370110221/Informatika A)
