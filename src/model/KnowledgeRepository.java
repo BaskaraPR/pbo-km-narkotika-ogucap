@@ -56,7 +56,7 @@ public class KnowledgeRepository {
 
     public Putusan cariByNomor(String nomor) {
         for (Putusan p : daftarPutusan) {
-            if (p.getNomorPerkara().equalsIgnoreCase(nomor)) {
+            if (p.getNomorPerkara().contains(nomor)) {
                 return p;
             }
         }
@@ -93,8 +93,12 @@ public class KnowledgeRepository {
     public ArrayList<Putusan> filterByPengadilan(String pengadilan) {
         ArrayList<Putusan> filteredData = new ArrayList<>();
 
+        String searchQuery = pengadilan.toLowerCase();
+
         for (Putusan p : daftarPutusan) {
-            if (p.getPengadilan().equalsIgnoreCase(pengadilan)) {
+            String namaPengadilan = p.getPengadilan();
+
+            if (namaPengadilan != null && namaPengadilan.toLowerCase().contains(searchQuery)) {
                 filteredData.add(p);
             }
         }

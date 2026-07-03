@@ -50,17 +50,19 @@ public class SwingView extends JFrame {
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 4, 10, 10));
 
         JButton btnTambah = new JButton("Tambah Putusan");
         JButton btnHapus = new JButton("Hapus Terpilih");
         JButton btnCariNama = new JButton("Cari Nama");
         JButton btnFilterJenis = new JButton("Filter Jenis");
+        JButton btnFilterPengadilan = new JButton("Filter Pengadilan");
+        JButton btnDetail = new JButton("Detail");
         JButton btnStatistik = new JButton("Lihat Statistik");
         JButton btnRefresh = new JButton("Refresh Semua");
 
         Font btnFont = new Font("Arial", Font.PLAIN, 14);
-        for (JButton btn : new JButton[]{btnTambah, btnHapus, btnCariNama, btnFilterJenis, btnStatistik, btnRefresh}) {
+        for (JButton btn : new JButton[]{btnTambah, btnHapus, btnCariNama, btnFilterJenis, btnFilterPengadilan, btnDetail, btnStatistik, btnRefresh}) {
             btn.setFont(btnFont);
             buttonPanel.add(btn);
         }
@@ -78,6 +80,8 @@ public class SwingView extends JFrame {
         btnHapus.addActionListener(e -> actionHapus());
         btnCariNama.addActionListener(e -> actionCariNama());
         btnFilterJenis.addActionListener(e -> actionFilterJenis());
+        btnFilterPengadilan.addActionListener(e -> actionFilterPengadilan());
+        btnDetail.addActionListener(e -> actionDetailByNomor());
         btnStatistik.addActionListener(e -> actionStatistik());
         btnRefresh.addActionListener(e -> refreshTable());
     }
@@ -120,6 +124,69 @@ public class SwingView extends JFrame {
         ArrayList<Putusan> hasil = controller.filterByJenisNarkotika(jenis);
         updateTable(hasil, "Status: Menampilkan filter jenis '" + jenis + "' (" + hasil.size() + " data)");
     }
+
+    private void actionFilterPengadilan() {
+        String pengadilan = inputHandler.getMandatoryString("Masukkan Jenis Pengadilan: ");
+        ArrayList<Putusan> hasil = controller.filterByPengadilan(pengadilan);
+        updateTable(hasil, "Status: Menampilkan filter pengadilan '" + pengadilan + "' (" + hasil.size() + " data)");
+    }
+
+    private void actionDetailByNomor() {
+        String nomor = inputHandler.getMandatoryString("Masukkan Nomor Perkara:");
+
+        Putusan hasil = controller.cariDetailByNomor(nomor);
+
+        System.out.println(hasil.toString());
+
+        if (hasil != null) {
+            String detail = String.format("""
+                Nomor Perkara   : %s
+                Pengadilan      : %s
+                Tanggal Putusan : %s
+
+                Nama Terdakwa   : %s
+                Umur            : %d tahun
+
+                Jenis Narkotika : %s
+                Berat Barang Bukti : %.2f gram
+
+                Pasal Dilanggar : %s
+                Peran Terdakwa  : %s
+
+                Vonis Penjara   : %d tahun
+                Vonis Denda     : Rp%,.0f
+
+                Nama Hakim      : %s
+                """,
+                    hasil.getNomorPerkara(),
+                    hasil.getPengadilan(),
+                    hasil.getTanggalPutusan(),
+                    hasil.getNamaTerdakwa(),
+                    hasil.getUmurTerdakwa(),
+                    hasil.getJenisNarkotika(),
+                    hasil.getBeratBarangBukti(),
+                    hasil.getPasalDilanggar(),
+                    hasil.getPeranTerdakwa(),
+                    hasil.getVonisHukuman(),
+                    hasil.getVonisDenda(),
+                    hasil.getNamaHakim()
+            );
+            JOptionPane.showMessageDialog(
+                    this,
+                    detail,
+                    "Detail Putusan",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Putusan dengan Nomor Perkara '" + nomor + "' tidak ditemukan.",
+                    "Pencarian",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }
+
 
     private void actionStatistik() {
         ArrayList<Putusan> semuaData = controller.tampilkanLaporanStatistik();

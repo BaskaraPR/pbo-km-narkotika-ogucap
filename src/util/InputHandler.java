@@ -46,7 +46,6 @@ public class InputHandler {
     }
 
 
-    /** Throws IllegalArgumentException with a message if blank. */
     public String validateMandatoryString(String fieldLabel, String rawInput) {
         if (rawInput == null || rawInput.trim().isEmpty()) {
             throw new IllegalArgumentException(fieldLabel + " wajib diisi!");

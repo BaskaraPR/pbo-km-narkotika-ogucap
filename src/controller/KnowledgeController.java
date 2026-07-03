@@ -38,15 +38,8 @@ public class KnowledgeController {
         return data;
     }
 
-    public void cariDetailByNomor(String nomor) {
-        Putusan p = repository.cariByNomor(nomor);
-
-        if (p != null) {
-            System.out.println("\n--- DETAIL PENCARIAN PUTUSAN ---");
-            p.tampilkan(true); // Memanggil method tampilkan(true) untuk output detail/toString
-        } else {
-            System.out.println("Peringatan: Putusan dengan Nomor Perkara '" + nomor + "' tidak ditemukan.");
-        }
+    public Putusan cariDetailByNomor(String nomor) {
+        return repository.cariByNomor(nomor);
     }
 
     public ArrayList<Putusan> cariByNama(String nama) {
@@ -61,9 +54,10 @@ public class KnowledgeController {
         return hasil;
     }
 
-    public void filterByPengadilan(String pengadilan) {
+    public ArrayList<Putusan> filterByPengadilan(String pengadilan) {
         ArrayList<Putusan> hasil = repository.filterByPengadilan(pengadilan);
         tampilkanHasilList(hasil, "FILTER PENGADILAN: " + pengadilan);
+        return hasil;
     }
 
     public void hapusPutusan(String nomor) {
