@@ -1,3 +1,5 @@
+package util;
+
 import javax.swing.JOptionPane;
 
 public class InputHandler {
@@ -53,5 +55,6 @@ public class InputHandler {
         }
     }
 }
+
 
 
