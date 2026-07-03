@@ -8,12 +8,7 @@ import java.util.ArrayList;
 
 public class KnowledgeController {
 
-    private KnowledgeRepository repository;
-
-
-    public KnowledgeController() {
-        this.repository = new KnowledgeRepository();
-    }
+    private final KnowledgeRepository repository;
 
     public KnowledgeController(KnowledgeRepository repository) {
         this.repository = repository;
@@ -28,7 +23,7 @@ public class KnowledgeController {
         }
     }
 
-    public void tampilkanSemuaPutusan() {
+    public ArrayList<Putusan> tampilkanSemuaPutusan() {
         ArrayList<Putusan> data = repository.getDaftarSemua();
 
         if (data.isEmpty()) {
@@ -40,6 +35,7 @@ public class KnowledgeController {
             }
             System.out.println("Total Data Tersimpan: " + repository.getTotalData());
         }
+        return data;
     }
 
     public void cariDetailByNomor(String nomor) {
@@ -53,14 +49,16 @@ public class KnowledgeController {
         }
     }
 
-    public void cariByNama(String nama) {
+    public ArrayList<Putusan> cariByNama(String nama) {
         ArrayList<Putusan> hasil = repository.cariByNama(nama);
         tampilkanHasilList(hasil, "PENCARIAN NAMA TERDAKWA: " + nama);
+        return hasil;
     }
 
-    public void filterByJenisNarkotika(String jenis) {
+    public ArrayList<Putusan> filterByJenisNarkotika(String jenis) {
         ArrayList<Putusan> hasil = repository.filterByJenis(jenis);
         tampilkanHasilList(hasil, "FILTER JENIS NARKOTIKA: " + jenis);
+        return hasil;
     }
 
     public void filterByPengadilan(String pengadilan) {
@@ -78,11 +76,12 @@ public class KnowledgeController {
         }
     }
 
-    public void tampilkanLaporanStatistik() {
+    public ArrayList<Putusan> tampilkanLaporanStatistik() {
         ArrayList<Putusan> semuaData = repository.getDaftarSemua();
         StatistikPutusan statistik = new StatistikPutusan(semuaData);
 
         statistik.tampilkanLaporan();
+        return semuaData;
     }
 
     private void tampilkanHasilList(ArrayList<Putusan> daftar, String konteks) {
@@ -98,7 +97,4 @@ public class KnowledgeController {
         }
     }
 
-    public KnowledgeRepository getRepository() {
-        return repository;
-    }
 }

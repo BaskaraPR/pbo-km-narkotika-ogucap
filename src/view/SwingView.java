@@ -32,13 +32,11 @@ public class SwingView extends JFrame {
     }
 
     private void initComponents() {
-        // 1. Header
         JLabel header = new JLabel("KMS PERKARA NARKOTIKA", SwingConstants.CENTER);
         header.setFont(new Font("Arial", Font.BOLD, 24));
         header.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         add(header, BorderLayout.NORTH);
 
-        // 2. Tabel
         String[] columns = {"No. Perkara", "Terdakwa", "Jenis Narkoba", "Pengadilan", "Vonis (Bln)", "Denda (Rp)"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -52,7 +50,6 @@ public class SwingView extends JFrame {
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // 3. Panel Tombol
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton btnTambah = new JButton("Tambah Putusan");
@@ -68,7 +65,6 @@ public class SwingView extends JFrame {
             buttonPanel.add(btn);
         }
 
-        // 4. Status Bar
         statusLabel = new JLabel("Status: Siap");
         statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
@@ -78,7 +74,6 @@ public class SwingView extends JFrame {
         southContainer.add(statusLabel, BorderLayout.SOUTH);
         add(southContainer, BorderLayout.SOUTH);
 
-        // 5. Action Listeners
         btnTambah.addActionListener(e -> actionTambah());
         btnHapus.addActionListener(e -> actionHapus());
         btnCariNama.addActionListener(e -> actionCariNama());
@@ -87,7 +82,6 @@ public class SwingView extends JFrame {
         btnRefresh.addActionListener(e -> refreshTable());
     }
 
-    // --- ACTION METHODS ---
 
     private void actionTambah() {
         Putusan p = showAddForm();
@@ -117,18 +111,18 @@ public class SwingView extends JFrame {
 
     private void actionCariNama() {
         String nama = inputHandler.getMandatoryString("Masukkan Nama Terdakwa: ");
-        ArrayList<Putusan> hasil = controller.getRepository().cariByNama(nama);
+        ArrayList<Putusan> hasil = controller.cariByNama(nama);
         updateTable(hasil, "Status: Menampilkan hasil pencarian nama '" + nama + "' (" + hasil.size() + " data)");
     }
 
     private void actionFilterJenis() {
         String jenis = inputHandler.getMandatoryString("Masukkan Jenis Narkotika: ");
-        ArrayList<Putusan> hasil = controller.getRepository().filterByJenis(jenis);
+        ArrayList<Putusan> hasil = controller.filterByJenisNarkotika(jenis);
         updateTable(hasil, "Status: Menampilkan filter jenis '" + jenis + "' (" + hasil.size() + " data)");
     }
 
     private void actionStatistik() {
-        ArrayList<Putusan> semuaData = controller.getRepository().getDaftarSemua();
+        ArrayList<Putusan> semuaData = controller.tampilkanLaporanStatistik();
         if (semuaData.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Belum ada data untuk ditampilkan statistiknya.");
             return;
@@ -136,19 +130,15 @@ public class SwingView extends JFrame {
 
         StatistikPutusan stat = new StatistikPutusan(semuaData);
 
-        // Panggil method baru untuk menampilkan dialog custom
         showStatistikDialog(stat);
     }
 
-    // --- METHOD BARU: DIALOG STATISTIK DENGAN TOMBOL EKSPOR DI KANAN ---
     private void showStatistikDialog(StatistikPutusan stat) {
-        // 1. Buat JDialog custom
         JDialog dialog = new JDialog(this, "Laporan Statistik Putusan", true);
         dialog.setSize(600, 400);
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout(10, 10));
 
-        // 2. Buat konten statistik (di tengah)
         String msg = String.format(
                 "Total Putusan          : %d\n" +
                         "Rata-rata Vonis        : %.2f bulan\n" +
@@ -170,7 +160,6 @@ public class SwingView extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         dialog.add(scrollPane, BorderLayout.CENTER);
 
-        // 3. Buat panel tombol di sebelah KANAN (EAST)
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
@@ -183,12 +172,9 @@ public class SwingView extends JFrame {
         btnEkspor.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnTutup.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // ===== BUTTON EKSPOR (BELUM ADA FUNGSI) =====
         btnEkspor.addActionListener(e -> {
-            // Placeholder - nanti bisa di-connect ke controller/logika ekspor
             JOptionPane.showMessageDialog(dialog, "Fitur Ekspor akan segera hadir!", "Info", JOptionPane.INFORMATION_MESSAGE);
         });
-        // =============================================
 
         btnTutup.addActionListener(e -> dialog.dispose());
 
@@ -198,15 +184,13 @@ public class SwingView extends JFrame {
 
         dialog.add(rightPanel, BorderLayout.EAST);
 
-        // 4. Tampilkan dialog
+
         dialog.setVisible(true);
     }
-    // ------------------------------------------------------------------
 
-    // --- HELPER METHODS ---
 
     private void refreshTable() {
-        ArrayList<Putusan> data = controller.getRepository().getDaftarSemua();
+        ArrayList<Putusan> data = controller.tampilkanSemuaPutusan();
         updateTable(data, "Status: Menampilkan semua data (" + data.size() + " record)");
     }
 
