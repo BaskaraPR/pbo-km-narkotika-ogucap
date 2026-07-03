@@ -1,5 +1,4 @@
 #KMS Pengadilan Narkotika
-
 ##Deskripsi Proyek
 Proyek ini merupakan aplikasi Knowledge Management System (KMS) Putusan Pengadilan Narkotika yang dibangun menggunakan bahasa pemrograman Java. Sistem ini dirancang secara spesifik dengan menerapkan prinsip Object Oriented Programming (OOP) serta menggunakan pola arsitektur Model-View-Controller (MVC) untuk memisahkan logika data, tampilan, dan kontrol aplikasi.  Aplikasi ini bertujuan untuk mengolah dataset putusan pengadilan pidana narkotika. Informasi hukum yang dikelola di dalam sistem meliputi identitas terdakwa, jenis dan berat barang bukti narkotika, pasal yang dilanggar, hingga rincian vonis hukuman yang dijatuhkan oleh pengadilan. Seluruh pengerjaan dan manajemen basis kode proyek dikelola secara kolaboratif menggunakan version control Git.  
 ##Cara Kompilasi
