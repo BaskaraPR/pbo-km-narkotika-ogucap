@@ -14,5 +14,9 @@ Proyek ini membutuhkan lingkungan pengembangan Java standar. Berikut adalah lang
 - Setelah program berjalan, Anda dapat mulai berinteraksi dengan antarmuka pengguna (konsol atau GUI JavaFX) untuk menggunakan fitur aplikasi seperti menambah data putusan, mencari putusan, menyaring data, atau melihat statistik.
 - Pastikan Anda tidak memasukkan input yang salah agar dapat melihat respons penanganan error dari sistem.  
 
+## Demo Video
 
-<img width="837" height="1000" alt="image" src="https://github.com/user-attachments/assets/297d8cdb-c5d9-4b14-81b0-8b182c12883c" />
+## Anggota Kelompok
+- Baskara Putra Ramadhan (202510370110221/Informatika A)
+- Fidho Dwiwahyu Hidayat (202510370110001/informatika A)
+- Syamil Muhammad Ba'awad (202510370110023/Informatika A)
