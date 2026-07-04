@@ -238,21 +238,18 @@ public class SwingView extends JFrame {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
-        JButton btnEkspor = new JButton("Ekspor");
         JButton btnTutup = new JButton("Tutup");
 
-        btnEkspor.setFont(new Font("Arial", Font.PLAIN, 13));
+
         btnTutup.setFont(new Font("Arial", Font.PLAIN, 13));
-        btnEkspor.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         btnTutup.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        btnEkspor.addActionListener(e -> {
-            JOptionPane.showMessageDialog(dialog, "Fitur Ekspor akan segera hadir!", "Info", JOptionPane.INFORMATION_MESSAGE);
-        });
+
 
         btnTutup.addActionListener(e -> dialog.dispose());
 
-        rightPanel.add(btnEkspor);
+        
         rightPanel.add(Box.createVerticalStrut(10)); // Jarak antar tombol
         rightPanel.add(btnTutup);
 
